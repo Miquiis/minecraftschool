@@ -1,7 +1,9 @@
 package me.miquiis.minecraftschool;
 
 import me.miquiis.minecraftschool.entity.ModEntityTypes;
+import me.miquiis.minecraftschool.entity.render.BabyFakePlayerRenderer;
 import me.miquiis.minecraftschool.entity.render.FakePlayerRenderer;
+import me.miquiis.minecraftschool.entity.render.StudentRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraftforge.common.MinecraftForge;
@@ -58,6 +60,11 @@ public class MinecraftSchool
         // do something that can only be done on the client
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.FAKE_PLAYER.get(), FakePlayerRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.BABY_FAKE_PLAYER.get(), BabyFakePlayerRenderer::new);
+
+        ModEntityTypes.REGISTERED_STUDENTS.forEach(entityTypeRegistryObject -> {
+            RenderingRegistry.registerEntityRenderingHandler(entityTypeRegistryObject.get(), StudentRenderer::new);
+        });
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event)
