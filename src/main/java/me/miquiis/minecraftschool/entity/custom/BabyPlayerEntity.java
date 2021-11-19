@@ -10,6 +10,7 @@ import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
 import software.bernie.geckolib3.core.builder.AnimationBuilder;
 import software.bernie.geckolib3.core.controller.AnimationController;
+import software.bernie.geckolib3.core.easing.EasingType;
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent;
 import software.bernie.geckolib3.core.manager.AnimationData;
 import software.bernie.geckolib3.core.manager.AnimationFactory;
@@ -33,19 +34,20 @@ public class BabyPlayerEntity extends CreatureEntity implements IAnimatable {
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
     {
-        if (event.isMoving())
-        {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.baby.walk", true));
-        } else
-        {
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.baby.idle", true));
-        }
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.baby.panic", true));
+//        if ((getMotion().getX() >= 0.0001 || getMotion().getX() <= -0.0001) || (getMotion().getZ() >= 0.0001 || getMotion().getZ() <= -0.0001))
+//        {
+//            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.baby.walk", true));
+//        } else
+//        {
+//            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.baby.idle", true));
+//        }
         return PlayState.CONTINUE;
     }
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController(this, "controller", 20, this::predicate));
+        data.addAnimationController(new AnimationController(this, "walk_controller", 0, this::predicate));
     }
 
     @Override

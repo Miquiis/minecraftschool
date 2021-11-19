@@ -6,6 +6,7 @@ import me.miquiis.minecraftschool.entity.custom.FakePlayerEntity;
 import me.miquiis.minecraftschool.entity.model.BabyPlayerModel;
 import net.minecraft.client.renderer.IRenderTypeBuffer;
 import net.minecraft.client.renderer.entity.EntityRendererManager;
+import net.minecraft.client.renderer.entity.layers.HeldItemLayer;
 import net.minecraft.util.ResourceLocation;
 import software.bernie.example.client.model.entity.ExampleEntityModel;
 import software.bernie.geckolib3.model.AnimatedGeoModel;
@@ -16,7 +17,7 @@ public class BabyPlayerRenderer extends GeoEntityRenderer<BabyPlayerEntity> {
     public BabyPlayerRenderer(EntityRendererManager renderManager)
     {
         super(renderManager, new BabyPlayerModel());
-        this.shadowSize = 0.7F; //change 0.7 to the desired shadow size.
+        this.shadowSize = 0.2F; //change 0.7 to the desired shadow size.
     }
 
     @Override
