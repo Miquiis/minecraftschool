@@ -34,20 +34,20 @@ public class BabyPlayerEntity extends CreatureEntity implements IAnimatable {
 
     private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event)
     {
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.baby.panic", true));
-//        if ((getMotion().getX() >= 0.0001 || getMotion().getX() <= -0.0001) || (getMotion().getZ() >= 0.0001 || getMotion().getZ() <= -0.0001))
-//        {
-//            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.baby.walk", true));
-//        } else
-//        {
-//            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.baby.idle", true));
-//        }
+//        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.baby.panic", true));
+        if ((getMotion().getX() >= 0.0001 || getMotion().getX() <= -0.0001) || (getMotion().getZ() >= 0.0001 || getMotion().getZ() <= -0.0001))
+        {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.baby.walk", true));
+        } else
+        {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.baby.idle", true));
+        }
         return PlayState.CONTINUE;
     }
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController(this, "walk_controller", 0, this::predicate));
+        data.addAnimationController(new AnimationController(this, "walk_controller", 5, this::predicate));
     }
 
     @Override

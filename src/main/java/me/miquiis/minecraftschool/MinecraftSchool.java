@@ -3,8 +3,11 @@ package me.miquiis.minecraftschool;
 import me.miquiis.minecraftschool.entity.ModEntityTypes;
 import me.miquiis.minecraftschool.entity.render.BabyPlayerRenderer;
 import me.miquiis.minecraftschool.entity.render.FakePlayerRenderer;
+import me.miquiis.minecraftschool.managers.FileManager;
+import me.miquiis.minecraftschool.managers.RecordManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.client.Minecraft;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -30,10 +33,17 @@ public class MinecraftSchool
 {
     public static final String MOD_ID = "minecraftschool";
 
+    private static MinecraftSchool instance;
+
     // Directly reference a log4j logger.
     private static final Logger LOGGER = LogManager.getLogger();
 
+
+    private RecordManager recordManager;
+    private FileManager pathfindingFile;
+
     public MinecraftSchool() {
+        instance = this;
         // Register the setup method for modloading
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
@@ -60,6 +70,9 @@ public class MinecraftSchool
 
     private void doClientStuff(final FMLClientSetupEvent event) {
         // do something that can only be done on the client
+
+        recordManager = new RecordManager(this);
+        pathfindingFile = new FileManager("pathfinding");
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.FAKE_PLAYER.get(), FakePlayerRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.BABY_PLAYER.get(), BabyPlayerRenderer::new);
@@ -88,5 +101,17 @@ public class MinecraftSchool
         public static void onBlocksRegistry(final RegistryEvent.Register<Block> blockRegistryEvent) {
             // register a new block here
         }
+    }
+
+    public FileManager getPathfindingFile() {
+        return pathfindingFile;
+    }
+
+    public RecordManager getRecordManager() {
+        return recordManager;
+    }
+
+    public static MinecraftSchool getInstance() {
+        return instance;
     }
 }

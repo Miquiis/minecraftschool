@@ -1,12 +1,15 @@
 package me.miquiis.minecraftschool.event;
 
 import me.miquiis.minecraftschool.MinecraftSchool;
+import me.miquiis.minecraftschool.commands.HelloWorldCommand;
 import me.miquiis.minecraftschool.entity.ModEntityTypes;
 import me.miquiis.minecraftschool.entity.custom.BabyPlayerEntity;
 import me.miquiis.minecraftschool.entity.custom.FakePlayerEntity;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.server.command.ConfigCommand;
 
 @Mod.EventBusSubscriber(modid = MinecraftSchool.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModEvents {
