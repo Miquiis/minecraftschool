@@ -1,6 +1,7 @@
 package me.miquiis.minecraftschool;
 
 import me.miquiis.minecraftschool.entity.ModEntityTypes;
+import me.miquiis.minecraftschool.entity.render.BabyPlayerRenderer;
 import me.miquiis.minecraftschool.entity.render.FakePlayerRenderer;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
@@ -19,6 +20,7 @@ import net.minecraftforge.fml.event.server.FMLServerStartingEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import software.bernie.geckolib3.GeckoLib;
 
 import java.util.stream.Collectors;
 
@@ -47,6 +49,8 @@ public class MinecraftSchool
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);
+
+        GeckoLib.initialize();
     }
 
     private void setup(final FMLCommonSetupEvent event)
@@ -58,6 +62,7 @@ public class MinecraftSchool
         // do something that can only be done on the client
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.FAKE_PLAYER.get(), FakePlayerRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.BABY_PLAYER.get(), BabyPlayerRenderer::new);
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event)
