@@ -22,6 +22,7 @@ public class BabyPlayerEntity extends CreatureEntity implements IAnimatable {
     public BabyPlayerEntity(EntityType<? extends CreatureEntity> type, World worldIn) {
         super(type, worldIn);
         this.ignoreFrustumCheck = true;
+        this.rotationPitch = 15f;
     }
 
     public static AttributeModifierMap.MutableAttribute setCustomAttributes() {

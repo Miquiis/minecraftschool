@@ -21,6 +21,7 @@ public class RecordScript {
             this.posy = posy;
             this.posz = posz;
             this.yaw = yaw;
+            this.pitch = pitch;
         }
 
         public RecordTick(LivingEntity livingEntity)

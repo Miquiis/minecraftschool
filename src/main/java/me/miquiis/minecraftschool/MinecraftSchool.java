@@ -35,6 +35,9 @@ public class MinecraftSchool
 
     private static MinecraftSchool instance;
 
+    // IS REMOTE = IS CLIENT
+    // IS NOT REMOVE = IS SERVER
+
     // Directly reference a log4j logger.
     private static final Logger LOGGER = LogManager.getLogger();
 

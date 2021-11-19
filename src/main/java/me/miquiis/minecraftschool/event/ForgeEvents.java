@@ -45,7 +45,6 @@ public class ForgeEvents {
     @SubscribeEvent
     public static void onEntityTick(LivingEvent.LivingUpdateEvent event)
     {
-        if (event.getEntity().getEntityWorld().isRemote) return;
         final MinecraftSchool instance = MinecraftSchool.getInstance();
         final RecordManager recordManager = instance.getRecordManager();
         final LivingEntity livingEntity = event.getEntityLiving();
@@ -61,7 +60,14 @@ public class ForgeEvents {
             return;
         }
 
-        livingEntity.setPositionAndRotation(tick.posx, tick.posy, tick.posz, tick.yaw, tick.pitch);
+        if (!event.getEntity().getEntityWorld().isRemote()) {
+            livingEntity.setPositionAndRotation(tick.posx, tick.posy, tick.posz, tick.yaw, tick.pitch);
+            livingEntity.setRotationYawHead(tick.yaw);
+//            livingEntity.rotationPitch = tick.pitch;
+        } else
+        {
+            livingEntity.rotationPitch = tick.pitch;
+        }
     }
 
 }
