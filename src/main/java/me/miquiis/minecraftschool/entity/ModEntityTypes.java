@@ -27,8 +27,15 @@ public class ModEntityTypes {
     public static final RegistryObject<EntityType<BabyPlayerEntity>> BABY_PLAYER =
             ENTITY_TYPES.register("baby_player",
                     () -> EntityType.Builder.create(BabyPlayerEntity::new, EntityClassification.CREATURE)
-                            .size(0.35f, 0.6f)
+                            .size(0.35f, 0.75f)
                             .build(new ResourceLocation(MinecraftSchool.MOD_ID, "baby_player").toString())
+            );
+
+    public static final RegistryObject<EntityType<BabyPlayerEntity>> OTHER_BABY_PLAYER =
+            ENTITY_TYPES.register("other_baby_player",
+                    () -> EntityType.Builder.create(BabyPlayerEntity::new, EntityClassification.CREATURE)
+                            .size(0.35f, 0.75f)
+                            .build(new ResourceLocation(MinecraftSchool.MOD_ID, "other_baby_player").toString())
             );
 
     public static void register(IEventBus eventBus)

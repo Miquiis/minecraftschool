@@ -2,7 +2,9 @@ package me.miquiis.minecraftschool.managers;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapterFactory;
 import com.google.gson.stream.JsonReader;
+import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 import net.minecraft.client.Minecraft;
 
 import java.io.File;
@@ -30,6 +32,14 @@ public class FileManager {
         this.isFirstTime = createFolder();
     }
 
+    public FileManager(String filePath, RuntimeTypeAdapterFactory<?> adapterFactory)
+    {
+        this.minecraftFolder = Minecraft.getInstance().gameDir;
+        this.gson = new GsonBuilder().registerTypeAdapterFactory(adapterFactory).setPrettyPrinting().create();
+        this.mainFolder = new File(minecraftFolder, filePath);
+        this.isFirstTime = createFolder();
+    }
+
     private boolean createFolder()
     {
         if (!mainFolder.exists()) {
@@ -41,6 +51,14 @@ public class FileManager {
 
     public boolean saveObject(String fileName, Object object)
     {
+        try
+        {
+            final String json = gson.toJson(object);
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
         final String json = gson.toJson(object);
 
         File objectFile = new File(mainFolder, fileName + ".json");
@@ -50,6 +68,7 @@ public class FileManager {
             Files.write(objectFile.toPath(), json.getBytes(), StandardOpenOption.CREATE, StandardOpenOption.WRITE);
             return true;
         } catch (IOException e) {
+            System.out.println(e.toString());
             e.printStackTrace();
         }
 
@@ -84,6 +103,7 @@ public class FileManager {
             jsonReader.close();
             return object;
         } catch (IOException e) {
+            System.out.println(e.toString());
             e.printStackTrace();
         }
 

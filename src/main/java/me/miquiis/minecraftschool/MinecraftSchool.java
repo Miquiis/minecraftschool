@@ -1,10 +1,17 @@
 package me.miquiis.minecraftschool;
 
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 import me.miquiis.minecraftschool.entity.ModEntityTypes;
 import me.miquiis.minecraftschool.entity.render.BabyPlayerRenderer;
 import me.miquiis.minecraftschool.entity.render.FakePlayerRenderer;
 import me.miquiis.minecraftschool.managers.FileManager;
 import me.miquiis.minecraftschool.managers.RecordManager;
+import me.miquiis.minecraftschool.models.RecordScript;
+import me.miquiis.minecraftschool.network.MinecraftSchoolNetwork;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.client.Minecraft;
@@ -69,16 +76,21 @@ public class MinecraftSchool
     private void setup(final FMLCommonSetupEvent event)
     {
         // some preinit code
+        MinecraftSchoolNetwork.init();
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
         // do something that can only be done on the client
 
         recordManager = new RecordManager(this);
-        pathfindingFile = new FileManager("pathfinding");
+        pathfindingFile = new FileManager("pathfinding",
+                RuntimeTypeAdapterFactory.of(RecordScript.RecordTick.RecordTickEvent.class, "type")
+                .registerSubtype(RecordScript.RecordTick.ItemRecordTickEvent.class, "item")
+        );
 
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.FAKE_PLAYER.get(), FakePlayerRenderer::new);
         RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.BABY_PLAYER.get(), BabyPlayerRenderer::new);
+        RenderingRegistry.registerEntityRenderingHandler(ModEntityTypes.OTHER_BABY_PLAYER.get(), BabyPlayerRenderer::new);
     }
 
     private void enqueueIMC(final InterModEnqueueEvent event)

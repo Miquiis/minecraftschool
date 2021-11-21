@@ -6,6 +6,8 @@ import me.miquiis.minecraftschool.entity.ModEntityTypes;
 import me.miquiis.minecraftschool.models.PlayScript;
 import me.miquiis.minecraftschool.models.RecordScript;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.SpawnReason;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
@@ -40,9 +42,9 @@ public class RecordManager {
     {
         if (!isRecording(recorder)) return;
         RecordScript recordScript = getRecordScript(recorder);
-        mod.getPathfindingFile().saveObject(recordScript.name, recordScript);
         recording.remove(recorder);
         cachedScripts.remove(recordScript);
+        mod.getPathfindingFile().saveObject(recordScript.name, recordScript);
     }
 
     public void stopPlaying(UUID uuid)
@@ -51,7 +53,7 @@ public class RecordManager {
         currentPlaying.remove(uuid);
     }
 
-    public int startPlaying(ServerPlayerEntity player, String name)
+    public int startPlaying(ServerPlayerEntity player, String name, EntityType<?> entityType)
     {
         final RecordManager recordManager = MinecraftSchool.getInstance().getRecordManager();
         final RecordScript recordScript = recordManager.getRecordScript(name);
@@ -68,7 +70,12 @@ public class RecordManager {
             return -1;
         }
 
-        Entity spawnedEntity = ModEntityTypes.BABY_PLAYER.get().spawn(player.getServerWorld(), null, null, new BlockPos(recordScript.getFirstTick().posx, recordScript.getFirstTick().posy, recordScript.getFirstTick().posz), SpawnReason.COMMAND, false,  false);
+        if (entityType == null)
+        {
+            entityType = ModEntityTypes.FAKE_PLAYER.get();
+        }
+
+        Entity spawnedEntity = entityType.spawn(player.getServerWorld(), null, null, new BlockPos(recordScript.getFirstTick().posx, recordScript.getFirstTick().posy, recordScript.getFirstTick().posz), SpawnReason.COMMAND, false,  false);
 
         currentPlaying.put(spawnedEntity.getUniqueID(), new PlayScript(recordScript));
 

@@ -14,7 +14,6 @@ import javax.annotation.Nullable;
 
 public class BabyPlayerModel extends AnimatedGeoModel<BabyPlayerEntity> {
 
-
     @Override
     public ResourceLocation getModelLocation(BabyPlayerEntity object) {
         return new ResourceLocation(MinecraftSchool.MOD_ID, "geo/baby.geo.json");
@@ -29,7 +28,6 @@ public class BabyPlayerModel extends AnimatedGeoModel<BabyPlayerEntity> {
     public ResourceLocation getAnimationFileLocation(BabyPlayerEntity animatable) {
         return new ResourceLocation(MinecraftSchool.MOD_ID, "animations/baby.animation.json");
     }
-
 
     @Override
     public void setLivingAnimations(BabyPlayerEntity entity, Integer uniqueID, @Nullable AnimationEvent customPredicate) {
