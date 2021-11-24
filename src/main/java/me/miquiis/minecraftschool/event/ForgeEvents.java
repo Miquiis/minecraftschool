@@ -1,8 +1,10 @@
 package me.miquiis.minecraftschool.event;
 
 import me.miquiis.minecraftschool.MinecraftSchool;
+import me.miquiis.minecraftschool.commands.DebugCommand;
 import me.miquiis.minecraftschool.commands.HelloWorldCommand;
 import me.miquiis.minecraftschool.commands.RecordCommand;
+import me.miquiis.minecraftschool.entity.custom.BabyPlayerEntity;
 import me.miquiis.minecraftschool.managers.RecordManager;
 import me.miquiis.minecraftschool.models.PlayScript;
 import me.miquiis.minecraftschool.models.RecordScript;
@@ -14,6 +16,7 @@ import net.minecraft.entity.MobEntity;
 import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.text.StringTextComponent;
+import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityEvent;
@@ -37,6 +40,7 @@ public class ForgeEvents {
     {
         new HelloWorldCommand(event.getDispatcher());
         new RecordCommand(event.getDispatcher());
+        new DebugCommand(event.getDispatcher());
 
         ConfigCommand.register(event.getDispatcher());
     }

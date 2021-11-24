@@ -2,9 +2,12 @@ package me.miquiis.minecraftschool.entity.render;
 
 import com.mojang.blaze3d.matrix.MatrixStack;
 import com.mojang.blaze3d.systems.RenderSystem;
+import me.miquiis.minecraftschool.MinecraftSchool;
 import me.miquiis.minecraftschool.entity.custom.BabyPlayerEntity;
 import me.miquiis.minecraftschool.entity.custom.FakePlayerEntity;
 import me.miquiis.minecraftschool.entity.model.BabyPlayerModel;
+import me.miquiis.minecraftschool.managers.BubbleManager;
+import me.miquiis.minecraftschool.models.BubbleMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 import net.minecraft.client.gui.FontRenderer;
@@ -39,8 +42,7 @@ public class BabyPlayerRenderer extends GeoEntityRenderer<BabyPlayerEntity> {
     @Override
     public void render(BabyPlayerEntity entity, float entityYaw, float partialTicks, MatrixStack stack, IRenderTypeBuffer bufferIn, int packedLightIn) {
         renderKindaName(entity, new StringTextComponent("Test"), stack, bufferIn, packedLightIn);
-//        renderChatbox(entity, new StringTextComponent("Heeyy!"), stack, bufferIn, packedLightIn);
-        draw(entity, stack, bufferIn, packedLightIn, true, true);
+        renderBubbles(entity, stack, bufferIn, packedLightIn);
         stack.push();
         stack.scale(0.35f,0.35f,0.35f);
         super.render(entity, entityYaw, partialTicks, stack, bufferIn, packedLightIn);
@@ -100,17 +102,56 @@ public class BabyPlayerRenderer extends GeoEntityRenderer<BabyPlayerEntity> {
         }
     }
 
-    public static void draw(Entity entityIn, MatrixStack stack, IRenderTypeBuffer buffers, int packedLightIn, final boolean drawText, final boolean drawLittleBubbles) {
+    private void renderBubbles(Entity entityIn, MatrixStack stack, IRenderTypeBuffer buffers, int packedLightIn)
+    {
+        final MinecraftSchool modInstance = MinecraftSchool.getInstance();
+        final BubbleManager bubbleManager = modInstance.getBubbleManager();
+
+        bubbleManager.getClientMessages().forEach(bubbleMessage -> {
+            if (bubbleMessage.hasFaded(BubbleManager.STAY_OUT_TIME))
+            {
+                System.out.println("Faded");
+                bubbleManager.desyncMessage(bubbleMessage);
+                return;
+            }
+
+            System.out.println("Rendered");
+
+            if (!entityIn.getUniqueID().equals(bubbleMessage.messageSender))
+            {
+                return;
+            }
+
+            float fadedPercentage = bubbleMessage.getFadedPercentage(BubbleManager.STAY_OUT_TIME);
+
+            int alpha = 255 - (int) (255 * fadedPercentage);
+
+            if (alpha < 10)
+            {
+                return;
+            }
+
+            System.out.println(alpha);
+
+            int outlineColor = new Color(BubbleManager.BORDER_COLOR.getRed(), BubbleManager.BORDER_COLOR.getGreen(), BubbleManager.BORDER_COLOR.getBlue(), alpha).getRGB();
+            int insideColor = new Color(BubbleManager.INSIDE_COLOR.getRed(), BubbleManager.INSIDE_COLOR.getGreen(), BubbleManager.INSIDE_COLOR.getBlue(), alpha).getRGB();
+            int textColor = new Color(255, 255, 255, alpha).getRGB();
+
+            draw(bubbleMessage.message, entityIn, stack, buffers, packedLightIn, outlineColor, insideColor, textColor);
+        });
+    }
+
+    public static void draw(String message, Entity entityIn, MatrixStack stack, IRenderTypeBuffer buffers, int packedLightIn, int borderColor, int insideColor, int textColor) {
         final int bubbleSize = 5;
         final float size = -0.02f - bubbleSize * 0.001f;
-        final float f = entityIn.getHeight() + 1.0f + bubbleSize * 0.01f;
+        final float f = entityIn.getHeight() + 0.75f + bubbleSize * 0.01f;
         stack.push();
         stack.translate(0.0, (double)f, 0.0);
         stack.rotate(Minecraft.getInstance().getRenderManager().getCameraOrientation());
         stack.scale(size, size, size);
         RenderSystem.enableDepthTest();
         final FontRenderer renderer = Minecraft.getInstance().fontRenderer;
-        final java.util.List<String> lines = (java.util.List<String>)renderer.getCharacterManager().func_238365_g_("Hello, World!", 100, Style.EMPTY).stream().map(ITextProperties::getString).collect(Collectors.toList());
+        final java.util.List<String> lines = (java.util.List<String>)renderer.getCharacterManager().func_238365_g_(message, 100, Style.EMPTY).stream().map(ITextProperties::getString).collect(Collectors.toList());
         final int linesHeight = 10 * lines.size();
         int biggestLineWidth = 0;
         for (final String line : lines) {
@@ -119,35 +160,18 @@ public class BabyPlayerRenderer extends GeoEntityRenderer<BabyPlayerEntity> {
                 biggestLineWidth = lineWidth;
             }
         }
-        drawBigBubble(stack, biggestLineWidth, linesHeight, Color.BLACK.getRGB(), Color.WHITE.getRGB());
-//        final float yTranslate = (float)(lines.size() + 15);
-//        final int i2 = biggestLineWidth / 2;
-//        stack.translate((double)(i2 + 20), (double)(-yTranslate), 0.0);
-//        final float scale = 1.0f;
-//        stack.scale(scale, scale, scale);
-//        stack.translate(0.0, (double)(-linesHeight / 2.0f - 15.0f), 0.0);
-//        if (true) {
-//            int distanceBetween = -10;
-//            stack.translate(0.0, (double)(-distanceBetween), 0.0);
-//            drawBubble(i2, -linesHeight / 2, Color.BLUE.getRGB(), Color.CYAN.getRGB(), stack);
-//        }
-//        if (drawLittleBubbles) {
-//            drawLittleBubble(i2, -linesHeight / 2, Color.BLUE.getRGB(), Color.CYAN.getRGB(), stack);
-//            drawMediumBubble(i2, -linesHeight / 2, Color.RED.getRGB(), Color.YELLOW.getRGB(), stack);
-//        }
-//        if (drawText) {
-//            stack.translate(0.0, 0.0, 0.1);
-//            if (Color.WHITE.getAlpha() > 3) {
-//                final boolean flag = !entityIn.isDiscrete();
-//                int lineY = -linesHeight / 2 + 3;
-//                for (final String line2 : lines) {
-//                    renderer.renderString(line2, -renderer.getStringWidth(line2) / 2.0f, (float)lineY, Color.WHITE.getRGB(), false, stack.getLast().getMatrix(), buffers, false, 0, packedLightIn);
-//                    final int n = lineY;
-//                    renderer.getClass();
-//                    lineY = n + 9 + 1;
-//                }
-//            }
-//        }
+        drawBigBubble(stack, biggestLineWidth, linesHeight, borderColor, insideColor);
+        stack.translate(0.0, 0.0, 0.1);
+        if (Color.WHITE.getAlpha() > 3) {
+            final boolean flag = !entityIn.isDiscrete();
+            int lineY = -linesHeight - 3;
+            for (final String line2 : lines) {
+                renderer.renderString(line2, 5f, (float)lineY, textColor, false, stack.getLast().getMatrix(), buffers, false, 0, packedLightIn);
+                final int n = lineY;
+                renderer.getClass();
+                lineY = n + 9 + 1;
+            }
+        }
         stack.pop();
     }
 

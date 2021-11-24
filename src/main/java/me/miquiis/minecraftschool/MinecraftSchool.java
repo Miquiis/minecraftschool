@@ -8,6 +8,7 @@ import com.google.gson.typeadapters.RuntimeTypeAdapterFactory;
 import me.miquiis.minecraftschool.entity.ModEntityTypes;
 import me.miquiis.minecraftschool.entity.render.BabyPlayerRenderer;
 import me.miquiis.minecraftschool.entity.render.FakePlayerRenderer;
+import me.miquiis.minecraftschool.managers.BubbleManager;
 import me.miquiis.minecraftschool.managers.FileManager;
 import me.miquiis.minecraftschool.managers.RecordManager;
 import me.miquiis.minecraftschool.models.RecordScript;
@@ -43,12 +44,12 @@ public class MinecraftSchool
     private static MinecraftSchool instance;
 
     // IS REMOTE = IS CLIENT
-    // IS NOT REMOVE = IS SERVER
+    // IS NOT REMOTE = IS SERVER
 
     // Directly reference a log4j logger.
     private static final Logger LOGGER = LogManager.getLogger();
 
-
+    private BubbleManager bubbleManager;
     private RecordManager recordManager;
     private FileManager pathfindingFile;
 
@@ -77,6 +78,7 @@ public class MinecraftSchool
     {
         // some preinit code
         MinecraftSchoolNetwork.init();
+        bubbleManager = new BubbleManager(this);
     }
 
     private void doClientStuff(final FMLClientSetupEvent event) {
@@ -116,6 +118,10 @@ public class MinecraftSchool
         public static void onBlocksRegistry(final RegistryEvent.Register<Block> blockRegistryEvent) {
             // register a new block here
         }
+    }
+
+    public BubbleManager getBubbleManager() {
+        return bubbleManager;
     }
 
     public FileManager getPathfindingFile() {

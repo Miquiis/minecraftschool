@@ -5,6 +5,7 @@ import me.miquiis.minecraftschool.commands.HelloWorldCommand;
 import me.miquiis.minecraftschool.entity.ModEntityTypes;
 import me.miquiis.minecraftschool.entity.custom.BabyPlayerEntity;
 import me.miquiis.minecraftschool.entity.custom.FakePlayerEntity;
+import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

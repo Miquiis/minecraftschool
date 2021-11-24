@@ -2,6 +2,7 @@ package me.miquiis.minecraftschool.network;
 
 import me.miquiis.minecraftschool.MinecraftSchool;
 import me.miquiis.minecraftschool.network.message.RotateHeadMessage;
+import me.miquiis.minecraftschool.network.message.SendBubbleMessage;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.network.NetworkRegistry;
 import net.minecraftforge.fml.network.simple.SimpleChannel;
@@ -17,6 +18,7 @@ public class MinecraftSchoolNetwork {
 
     public static void init() {
         CHANNEL.registerMessage(0, RotateHeadMessage.class, RotateHeadMessage::encode, RotateHeadMessage::decode, RotateHeadMessage::handle);
+        CHANNEL.registerMessage(1, SendBubbleMessage.class, SendBubbleMessage::encode, SendBubbleMessage::decode, SendBubbleMessage::handle);
     }
 
 }
